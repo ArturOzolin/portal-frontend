@@ -1,0 +1,92 @@
+/* Error Page - Minimalist Design */
+
+.errorPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--color-background);
+}
+
+.errorCard {
+  width: min(560px, calc(100vw - 32px));
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  padding: 40px;
+  text-align: center;
+  box-shadow: var(--shadow-xl);
+  border: 1px solid rgba(208, 189, 244, 0.3);
+  animation: pageFadeIn 0.5s ease-out;
+}
+
+.errorCode {
+  font-size: 64px;
+  font-weight: 800;
+  color: var(--color-error);
+  margin-bottom: 12px;
+}
+
+.errorCard h1 {
+  margin: 0 0 12px;
+  color: var(--color-dark-slate);
+  font-size: 1.8rem;
+}
+
+.errorCard p {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.errorActions {
+  margin-top: 24px;
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.errorActions button {
+  border: none;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--color-mint-dark), var(--color-mint));
+  color: white;
+  padding: 14px 24px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all var(--transition-base);
+  box-shadow: 0 4px 14px rgba(110, 160, 134, 0.25);
+}
+
+.errorActions button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(110, 160, 134, 0.35);
+}
+
+.errorActions .secondary {
+  background: var(--color-text-secondary);
+  box-shadow: none;
+}
+
+.errorActions .secondary:hover {
+  background: var(--color-dark-slate);
+}
+
+@media (max-width: 480px) {
+  .errorCard {
+    padding: 32px 24px;
+  }
+  
+  .errorCode {
+    font-size: 52px;
+  }
+  
+  .errorActions {
+    flex-direction: column;
+  }
+  
+  .errorActions button {
+    width: 100%;
+  }
+}

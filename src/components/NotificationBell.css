@@ -1,0 +1,119 @@
+.notificationContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.notificationBell {
+  position: relative;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  line-height: 1;
+  padding: 8px 8px 8px 0;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.notificationBell:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.notificationBadge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+}
+
+.notificationDropdown {
+  position: absolute;
+  right: 0;
+  top: 42px;
+  width: 360px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  z-index: 20;
+}
+
+.notificationHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.notificationHeader h4 {
+  margin: 0;
+}
+
+.markAllBtn {
+  border: none;
+  background: #4b5563;
+  color: #fff;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.notificationList {
+  max-height: 320px;
+  overflow: auto;
+}
+
+.notificationItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  border-bottom: 1px solid #f3f4f6;
+  padding: 10px 12px;
+}
+
+.notificationItem.unread {
+  background: #eff6ff;
+}
+
+.notificationBody {
+  flex: 1;
+  cursor: pointer;
+}
+
+.notificationTitle {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.notificationText {
+  color: #4b5563;
+  font-size: 13px;
+}
+
+.deleteBtn {
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.notificationEmpty {
+  padding: 20px;
+  text-align: center;
+  color: #6b7280;
+}
+

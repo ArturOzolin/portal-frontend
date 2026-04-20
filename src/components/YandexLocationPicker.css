@@ -1,0 +1,41 @@
+.yandex-map-picker {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.yandex-map-container {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid #e5e7eb;
+}
+
+.yandex-map-hint {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #4b5563;
+}
+
+.yandex-map-error {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #b91c1c;
+}
+
+.yandex-map-details {
+  margin-top: 8px;
+}
+
+.yandex-map-address,
+.yandex-map-coords {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #111827;
+  word-break: break-word;
+}
+
+.yandex-map-label {
+  font-weight: 700;
+  margin-right: 6px;
+}

@@ -1,0 +1,337 @@
+/* Login Page - Minimalist Design */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  background: var(--color-background);
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.portal-container {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  padding: 48px 40px;
+  text-align: center;
+  border: 1px solid rgba(208, 189, 244, 0.3);
+}
+
+.portal-logo {
+  font-size: 2.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--color-mint-dark), var(--color-mint));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.loginContainer .lang-toggle {
+  margin: 0 auto 12px;
+}
+
+.portal-subtitle {
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 36px;
+  font-weight: 400;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--color-dark-slate);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--color-pale-blue);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  transition: all var(--transition-base);
+  background: var(--color-pale-blue);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--color-purple);
+  background: var(--color-surface);
+  box-shadow: 0 0 0 4px rgba(110, 160, 134, 0.1);
+}
+
+.form-group input::placeholder {
+  color: var(--color-text-secondary);
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.btn {
+  padding: 14px 24px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-mint-dark), var(--color-mint));
+  color: white;
+  box-shadow: 0 4px 14px rgba(110, 160, 134, 0.25);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(110, 160, 134, 0.35);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-purple);
+  border: 2px solid var(--color-purple);
+}
+
+.btn-secondary:hover {
+  background: var(--color-purple);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+}
+
+.portal-container.loginContainer {
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  padding: 48px 40px;
+  text-align: center;
+  width: 100% !important;
+  max-width: 440px !important;
+  margin: 0 auto !important;
+  animation: pageFadeIn 0.5s ease-out;
+  border: 1px solid rgba(208, 189, 244, 0.3);
+}
+
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.logo {
+  font-size: 2.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--color-mint-dark), var(--color-mint));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.subtitle {
+  color: var(--color-text-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 36px;
+  font-weight: 400;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--color-dark-slate);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.formGroup input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--color-pale-blue);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  transition: all var(--transition-base);
+  background: var(--color-pale-blue);
+}
+
+.formGroup input:focus {
+  outline: none;
+  border-color: var(--color-purple);
+  background: var(--color-surface);
+  box-shadow: 0 0 0 4px rgba(110, 160, 134, 0.1);
+}
+
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.btnPrimary, .btnSecondary, .btnDanger {
+  padding: 14px 24px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.btnPrimary {
+  background: linear-gradient(135deg, var(--color-mint-dark), var(--color-mint));
+  color: white;
+  box-shadow: 0 4px 14px rgba(110, 160, 134, 0.25);
+}
+
+.btnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(110, 160, 134, 0.35);
+}
+
+.btnSecondary {
+  background: transparent;
+  color: var(--color-purple);
+  border: 2px solid var(--color-purple);
+}
+
+.btnSecondary:hover {
+  background: var(--color-purple);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.btnDanger {
+  background: #ef4444;
+  color: white;
+}
+
+.btnDanger:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+}
+
+.message {
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+  font-weight: 500;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.success {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.btnPrimary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (max-width: 480px) {
+  .portal-container {
+    padding: 36px 24px;
+    margin: 16px;
+  }
+
+  .portal-container.loginContainer {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 16px !important;
+  }
+
+  .portal-logo {
+    font-size: 2.4rem;
+  }
+
+  .button-group {
+    gap: 12px;
+  }
+
+  .btn {
+    padding: 12px 20px;
+    font-size: 0.95rem;
+  }
+
+  .loginContainer {
+    padding: 36px 24px;
+    margin: 16px;
+  }
+
+  .logo {
+    font-size: 2.4rem;
+  }
+
+  .buttonGroup {
+    gap: 12px;
+  }
+
+  .btnPrimary, .btnSecondary, .btnDanger {
+    padding: 12px 20px;
+    font-size: 0.95rem;
+  }
+}

@@ -1,0 +1,167 @@
+/* Portal Theme - Warm Minimal Design */
+:root {
+  /* Warm Palette */
+  --color-bg: #f6f1eb;
+  --color-bg-alt: #f8f3ee;
+  --color-mint: #9cc9b2;
+  --color-mint-dark: #6ea086;
+  --color-peach: #f4cfbf;
+  --color-lavender: #d7c3ef;
+  --color-butter: #f2d69a;
+  --color-sky: #bdd9e8;
+  --color-rose: #efb4ba;
+  --color-line: #eadfd5;
+
+  /* Semantic Colors (kept for component compatibility) */
+  --color-light-blue: #bdd9e8;
+  --color-pale-blue: #f0ebe3;
+  --color-purple: #6ea086;
+  --color-dark-slate: #2f2a2a;
+
+  --color-primary: #6ea086;
+  --color-primary-light: #9cc9b2;
+  --color-primary-dark: #5a8a70;
+  --color-secondary: #bdd9e8;
+  --color-background: #f6f1eb;
+  --color-surface: #fffaf6;
+  --color-text-primary: #2f2a2a;
+  --color-text-secondary: #7b716b;
+  --color-border: #eadfd5;
+  --color-success: #10b981;
+  --color-error: #ef4444;
+  --color-warning: #f59e0b;
+
+  /* Shadows (warm-toned) */
+  --shadow-sm: 0 1px 2px 0 rgba(126, 101, 84, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(126, 101, 84, 0.1), 0 2px 4px -1px rgba(126, 101, 84, 0.06);
+  --shadow-lg: 0 10px 24px rgba(126, 101, 84, 0.12);
+  --shadow-xl: 0 20px 40px rgba(126, 101, 84, 0.16);
+
+  /* Border Radius */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+  --radius-shell: 34px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 400ms ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  background:
+    radial-gradient(circle at top left, #fff8f1 0, transparent 28%),
+    radial-gradient(circle at top right, #f1f9f5 0, transparent 22%),
+    linear-gradient(180deg, var(--color-bg-alt) 0%, var(--color-bg) 100%);
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+#root {
+  width: 100%;
+  max-width: none;
+}
+
+.home-container,
+.dashboardContainer,
+.loginContainer,
+.access-denied-card,
+.edit-profile-card,
+.successCard,
+.successEditCard,
+.moderator-page .container {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pageScaleIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.home-container,
+.dashboardContainer,
+.portal-container,
+.edit-container,
+.errorPage,
+.successPage,
+.successEditPage,
+.supportPage,
+.adDetailsPage,
+.admin-page,
+.moderator-page {
+  animation: pageFadeIn 0.35s ease-out;
+}
+
+html { scroll-behavior: smooth; }
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track {
+  background: var(--color-pale-blue);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-mint);
+}
+
+::selection {
+  background: var(--color-mint);
+  color: white;
+}
+
+.icon {
+  flex-shrink: 0;
+  transition: none;
+  pointer-events: none;
+}
+
+button, .btn {
+  transition: all var(--transition-base);
+}
+
+.card-hover {
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-xl);
+}

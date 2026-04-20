@@ -1,0 +1,61 @@
+/* Access Denied Page - Minimalist Design */
+
+.access-denied {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.access-denied-card {
+  max-width: 520px;
+  width: 100%;
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  padding: 40px;
+  text-align: center;
+  border: 1px solid rgba(208, 189, 244, 0.3);
+  animation: pageFadeIn 0.5s ease-out;
+}
+
+.access-denied-card .icon-container {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.access-denied-card h1 {
+  margin: 0 0 12px;
+  font-size: 1.8rem;
+  color: var(--color-dark-slate);
+}
+
+.access-denied-card p {
+  margin: 0 0 24px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.access-denied-button {
+  display: inline-block;
+  padding: 14px 28px;
+  background: linear-gradient(135deg, var(--color-mint-dark), var(--color-mint));
+  color: white;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all var(--transition-base);
+  box-shadow: 0 4px 14px rgba(110, 160, 134, 0.25);
+}
+
+.access-denied-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(110, 160, 134, 0.35);
+}

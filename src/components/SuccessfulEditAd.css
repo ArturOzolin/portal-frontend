@@ -1,0 +1,43 @@
+.successEditPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.successEditCard {
+  width: 100%;
+  max-width: 640px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.successEditInfo {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 10px;
+  background: #f6f8fc;
+  display: grid;
+  gap: 8px;
+}
+
+.successEditActions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.successEditActions button {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  background: #4f6bed;
+  color: #fff;
+}
+
