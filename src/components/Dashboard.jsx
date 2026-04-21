@@ -224,7 +224,7 @@ const Dashboard = () => {
 
         {/* Top bar */}
         <header className="dash-topbar">
-          <Link href="/" className="dash-brand">
+          <Link to="/" className="dash-brand">
             <div className="dash-brand-mark"></div>
             <span>PORTAL</span>
           </Link>
@@ -312,11 +312,11 @@ const Dashboard = () => {
                 🔖 {t('dashboard.filterBooked', 'Booked')} <span className="db-count">{bookedAds.length}</span>
               </button>
 
-              <Link href="/" className="db-nav-item">
+              <Link to="/" className="db-nav-item">
                 {t('dashboard.browseMarketplace', 'Browse Marketplace')}
               </Link>
 
-              <Link href="/edit-profile" className="db-nav-item">
+              <Link to="/edit-profile" className="db-nav-item">
                 {t('dashboard.editProfile', 'Edit Profile')}
               </Link>
 
@@ -324,7 +324,7 @@ const Dashboard = () => {
                 {t('dashboard.accountSettings', 'Account Settings')}
               </button>
 
-              <Link href="/support" className="db-nav-item">
+              <Link to="/support" className="db-nav-item">
                 {t('dashboard.support', 'Support')}
               </Link>
 
