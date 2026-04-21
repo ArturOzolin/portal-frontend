@@ -51,7 +51,7 @@ const Icon = ({ name, size = 24, className = '', alt = '' }) => {
         height: `${scaledSize}px`,
         objectFit: 'contain',
         filter: ICON_STROKE_FILTER,
-        backgroundColor: name === 'location' ? 'transparent' : '#fff',
+        backgroundColor: 'transparent',
         display: 'inline-block',
         verticalAlign: 'middle',
       }}
