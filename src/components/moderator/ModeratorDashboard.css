@@ -274,8 +274,25 @@
 }
 
 .mod-ad-views {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: 0.82rem;
   color: var(--color-text-secondary);
+}
+
+.mod-ad-views-icon {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
 }
 
 /* ── Moderation actions ── */

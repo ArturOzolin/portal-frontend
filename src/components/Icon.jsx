@@ -10,7 +10,7 @@ const ICON_MAP = {
   location: '/images/icons/location.png',
   'empty-box': '/images/icons/empty-box.jpg',
   user: '/images/icons/user.jpg',
-  success: '/images/icons/success.jpg',
+  success: '/images/icons/success.png',
   error: '/images/icons/error.jpg',
   edit: '/images/icons/edit.jpg',
   settings: '/images/icons/settings.jpg',

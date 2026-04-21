@@ -252,6 +252,27 @@
   text-decoration: none;
 }
 
+.db-nav-item-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.db-nav-item-icon {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  flex-shrink: 0;
+  background-color: var(--color-text-secondary);
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+}
+
 .db-nav-item:hover {
   background: rgba(156, 201, 178, 0.12);
 }
@@ -543,6 +564,26 @@
   font-size: 0.76rem;
   color: var(--color-text-secondary);
   margin-bottom: 10px;
+}
+
+.db-ad-views {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.db-ad-views-icon {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
 }
 
 .db-ad-actions {

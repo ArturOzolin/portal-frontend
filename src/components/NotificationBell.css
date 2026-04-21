@@ -15,11 +15,24 @@
   line-height: 1;
   padding: 8px 8px 8px 0;
   cursor: pointer;
-  font-size: 20px;
+  color: var(--color-text-secondary);
 }
 
 .notificationBell:hover {
   background: rgba(255, 255, 255, 0.12);
+}
+
+.notificationBellIcon {
+  width: 20px;
+  height: 20px;
+  display: block;
+  background-color: currentColor;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
 }
 
 .notificationBadge {
@@ -116,4 +129,3 @@
   text-align: center;
   color: #6b7280;
 }
-

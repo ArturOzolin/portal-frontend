@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { apiGet, apiPost } from '../../api';
 import AccessDenied from '../AccessDenied';
 import './ModeratorDashboard.css';
+import eyeIcon from '../../assets/eye.png';
 
 const API_BASE = 'http://localhost:8080';
 
@@ -287,7 +288,17 @@ function ModeratorDashboard() {
                       <div className="mod-ad-desc">{ad.description}</div>
                     )}
 
-                    <div className="mod-ad-views">👁 {ad.viewCount || 0} views</div>
+                    <div className="mod-ad-views">
+                      <span
+                        className="mod-ad-views-icon"
+                        aria-hidden="true"
+                        style={{
+                          WebkitMaskImage: `url(${eyeIcon})`,
+                          maskImage: `url(${eyeIcon})`
+                        }}
+                      />
+                      {ad.viewCount || 0} views
+                    </div>
 
                     <div className="mod-actions">
                       <button className="mod-btn-approve" onClick={() => handleActionClick('approve', ad)}>
