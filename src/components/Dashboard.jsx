@@ -5,6 +5,8 @@ import NotificationBell from './NotificationBell';
 import Icon from './Icon';
 import { useI18n } from '../i18n/I18nProvider';
 import { Link, useNavigate } from 'react-router-dom';
+import bookmarkIcon from '../assets/bookmark.png';
+import eyeIcon from '../assets/eye.png';
 const API_BASE = 'http://localhost:8080';
 const Dashboard = () => {
   const { t, language } = useI18n();
@@ -309,7 +311,18 @@ const Dashboard = () => {
                 className={`db-nav-item${activeSection === 'booked' ? ' active' : ''}`}
                 onClick={() => selectSection('booked')}
               >
-                🔖 {t('dashboard.filterBooked', 'Booked')} <span className="db-count">{bookedAds.length}</span>
+                <span className="db-nav-item-main">
+                  <span
+                    className="db-nav-item-icon"
+                    aria-hidden="true"
+                    style={{
+                      WebkitMaskImage: `url(${bookmarkIcon})`,
+                      maskImage: `url(${bookmarkIcon})`
+                    }}
+                  />
+                  {t('dashboard.filterBooked', 'Booked')}
+                </span>
+                <span className="db-count">{bookedAds.length}</span>
               </button>
 
               <Link to="/" className="db-nav-item">
@@ -401,7 +414,17 @@ const Dashboard = () => {
                         </div>
                       )}
                       <div className="db-ad-meta">
-                        <span className="db-ad-views">👁 {ad.viewCount || 0}</span>
+                        <span className="db-ad-views">
+                          <span
+                            className="db-ad-views-icon"
+                            aria-hidden="true"
+                            style={{
+                              WebkitMaskImage: `url(${eyeIcon})`,
+                              maskImage: `url(${eyeIcon})`
+                            }}
+                          />
+                          {ad.viewCount || 0}
+                        </span>
                         <span className="db-ad-date">{formatDate(ad.createdAt)}</span>
                       </div>
                       {activeSection !== 'favorites' && activeSection !== 'booked' && (

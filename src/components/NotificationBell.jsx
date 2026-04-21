@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import './NotificationBell.css';
 import { useI18n } from '../i18n/I18nProvider';
+import notificationIcon from '../assets/notification.png';
 
 const API_BASE = 'http://localhost:8080';
 
@@ -111,7 +112,14 @@ const NotificationBell = ({ adIds = [] }) => {
           if (!isOpen) loadNotifications();
         }}
       >
-        🔔
+        <span
+          className="notificationBellIcon"
+          aria-hidden="true"
+          style={{
+            WebkitMaskImage: `url(${notificationIcon})`,
+            maskImage: `url(${notificationIcon})`
+          }}
+        />
         {unreadCount > 0 && <span className="notificationBadge">{unreadCount}</span>}
       </button>
 
