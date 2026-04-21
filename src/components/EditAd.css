@@ -49,6 +49,32 @@
   background: var(--color-pale-blue);
 }
 
+.editAdCard select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 48px;
+  color: var(--color-text-primary);
+  border-color: var(--color-line);
+  background-color: rgba(255, 250, 246, 0.96);
+  background-image:
+    linear-gradient(135deg, transparent 50%, var(--color-mint-dark) 50%),
+    linear-gradient(45deg, var(--color-mint-dark) 50%, transparent 50%),
+    linear-gradient(180deg, rgba(156, 201, 178, 0.18), rgba(156, 201, 178, 0.18));
+  background-position:
+    calc(100% - 22px) calc(50% - 3px),
+    calc(100% - 16px) calc(50% - 3px),
+    calc(100% - 42px) 50%;
+  background-size: 6px 6px, 6px 6px, 1px 22px;
+  background-repeat: no-repeat;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.editAdCard select:hover {
+  border-color: var(--color-mint);
+  background-color: var(--color-surface);
+}
+
 .editAdCard input:focus,
 .editAdCard textarea:focus,
 .editAdCard select:focus {
@@ -56,6 +82,11 @@
   border-color: var(--color-purple);
   background: var(--color-surface);
   box-shadow: 0 0 0 4px rgba(110, 160, 134, 0.1);
+}
+
+.editAdCard select option {
+  color: var(--color-text-primary);
+  background: var(--color-surface);
 }
 
 .editAdCard textarea {

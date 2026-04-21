@@ -4,6 +4,7 @@ import './CreateAd.css';
 import ProfanityWarningModal from './ProfanityWarningModal';
 import YandexLocationPicker from './YandexLocationPicker.jsx';
 import { useI18n } from '../i18n/I18nProvider';
+import StyledSelect from './StyledSelect';
 
 const API_BASE = 'http://localhost:8080';
 
@@ -38,6 +39,16 @@ const CreateAd = () => {
     const [subcategories, setSubcategories] = useState([]);
     const [submitting, setSubmitting] = useState(false);
     const [currentUserId, setCurrentUserId] = useState(null);
+
+    const categoryOptions = [
+        { value: '', label: t('createAd.chooseCategory', 'Choose a category') },
+        ...categories.map((category) => ({ value: String(category.id), label: category.name }))
+    ];
+
+    const subcategoryOptions = [
+        { value: '', label: t('createAd.chooseSubcategory', 'Choose a subcategory') },
+        ...subcategories.map((subcategory) => ({ value: subcategory.name, label: subcategory.name }))
+    ];
 
     useEffect(() => {
         fetch(`${API_BASE}/api/announcements/categories`, { credentials: 'include' })
@@ -241,23 +252,24 @@ const CreateAd = () => {
                         <div className="ca-step-body">
                             <div className="form-group">
                                 <label className="required">{t('createAd.fields.category', 'Category')}</label>
-                                <select name="categoryId" className="form-control" value={formData.categoryId} onChange={handleChange}>
-                                    <option value="">{t('createAd.chooseCategory', 'Choose a category')}</option>
-                                    {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                                </select>
+                                <StyledSelect
+                                    name="categoryId"
+                                    value={formData.categoryId}
+                                    onChange={handleChange}
+                                    options={categoryOptions}
+                                    placeholder={t('createAd.chooseCategory', 'Choose a category')}
+                                />
                             </div>
                             <div className="form-group">
                                 <label className="required">{t('createAd.fields.subcategory', 'Subcategory')}</label>
-                                <select
+                                <StyledSelect
                                     name="subcategory"
-                                    className="form-control"
                                     value={formData.subcategory}
                                     onChange={handleChange}
+                                    options={subcategoryOptions}
+                                    placeholder={t('createAd.chooseSubcategory', 'Choose a subcategory')}
                                     disabled={!formData.categoryId}
-                                >
-                                    <option value="">{t('createAd.chooseSubcategory', 'Choose a subcategory')}</option>
-                                    {subcategories.map(s => <option key={s.id} value={s.name}>{s.name}</option>)}
-                                </select>
+                                />
                             </div>
                             <div className="form-group">
                                 <label className="required">{t('createAd.fields.location', 'Location')}</label>

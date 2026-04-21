@@ -64,10 +64,26 @@
 
 .adBookBtn.booked,
 .adBookBtn:disabled {
-  background: #e8f5e9;
-  border-color: #4caf50;
-  color: #2e7d32;
+  background: rgba(45, 212, 191, 0.14);
+  border-color: #14b8a6;
+  color: #0f766e;
   cursor: default;
+}
+
+.adBookedActions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.adBookedBadge {
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(156, 201, 178, 0.22);
+  border: 1px solid var(--color-mint);
+  color: var(--color-mint-dark);
+  font-weight: 700;
 }
 
 .adTitleRow h1 {

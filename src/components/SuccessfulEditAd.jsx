@@ -46,7 +46,7 @@ const SuccessfulEditAd = () => {
         <div className="successEditActions">
           <button onClick={() => navigate('/dashboard')}>В личный кабинет</button>
           {announcement?.id && (
-            <button onClick={() => navigate(`/ad/${announcement.id}`)}>Открыть объявление</button>
+            <button className="secondary" onClick={() => navigate(`/ad/${announcement.id}`)}>Открыть объявление</button>
           )}
         </div>
       </div>
@@ -55,4 +55,3 @@ const SuccessfulEditAd = () => {
 };
 
 export default SuccessfulEditAd;
-

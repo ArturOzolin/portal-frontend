@@ -4,32 +4,9 @@ import './EditAd.css';
 import ProfanityWarningModal from './ProfanityWarningModal';
 import YandexLocationPicker from './YandexLocationPicker.jsx';
 import { useI18n } from '../i18n/I18nProvider';
+import StyledSelect from './StyledSelect';
 
 const API_BASE = 'http://localhost:8080';
-
-const categoryOptions = [
-  { value: 'ELECTRONICS', label: 'Электроника' },
-  { value: 'CLOTHING', label: 'Одежда и обувь' },
-  { value: 'HOME', label: 'Дом и сад' },
-  { value: 'BEAUTY', label: 'Красота и здоровье' },
-  { value: 'SPORTS', label: 'Спорт и отдых' },
-  { value: 'CHILDREN', label: 'Детские товары' },
-  { value: 'AUTO', label: 'Автотовары' },
-  { value: 'BOOKS', label: 'Книги и канцелярия' },
-  { value: 'HOBBY', label: 'Хобби и творчество' },
-  { value: 'PETS', label: 'Животные' },
-  { value: 'TUTORING', label: 'Репетиторство' },
-  { value: 'EDUCATION_SERVICES', label: 'Образовательные услуги' },
-  { value: 'HOUSEHOLD_SERVICES', label: 'Бытовые услуги' },
-  { value: 'REPAIR', label: 'Ремонт и строительство' },
-  { value: 'BEAUTY_SERVICES', label: 'Красота и уход' },
-  { value: 'TRANSPORT_SERVICES', label: 'Транспортные услуги' },
-  { value: 'IT_SERVICES', label: 'IT и компьютерные услуги' },
-  { value: 'EVENTS', label: 'Мероприятия и развлечения' },
-  { value: 'MEDICAL', label: 'Медицинские услуги' },
-  { value: 'LEGAL', label: 'Юридические услуги' },
-  { value: 'OTHER', label: 'Другое' }
-];
 
 const EditAd = () => {
   const { t } = useI18n();
@@ -43,9 +20,12 @@ const EditAd = () => {
   const [showProfanityWarning, setShowProfanityWarning] = useState(false);
   const [photo, setPhoto] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    categoryId: '',
     category: 'OTHER',
     subcategory: '',
     location: '',
@@ -54,6 +34,39 @@ const EditAd = () => {
     price: '',
     action: 'draft'
   });
+
+  const categorySelectOptions = [
+    { value: '', label: t('createAd.chooseCategory', 'Choose a category') },
+    ...categories.map((category) => ({
+      value: String(category.id),
+      label: category.name
+    }))
+  ];
+
+  const subcategoryOptions = [
+    { value: '', label: t('createAd.chooseSubcategory', 'Choose a subcategory') },
+    ...subcategories.map((subcategory) => ({
+      value: subcategory.name,
+      label: subcategory.name
+    }))
+  ];
+
+  const conditionOptions = [
+    { value: 'USED', label: t('enums.condition.USED') },
+    { value: 'NEW', label: t('enums.condition.NEW') },
+    { value: 'BROKEN', label: t('home.notWorking') }
+  ];
+
+  const priceTypeOptions = [
+    { value: 'fixed', label: t('editAd.fixedPrice', 'Fixed price') },
+    { value: 'negotiable', label: t('home.negotiable') },
+    { value: 'free', label: t('home.free') }
+  ];
+
+  const actionOptions = [
+    { value: 'draft', label: t('editAd.saveAsDraft', 'Save as draft') },
+    { value: 'publish', label: t('editAd.sendToModeration', 'Send to moderation') }
+  ];
 
   const hasProfanity = async (text) => {
     const response = await fetch(`${API_BASE}/api/profanity/check`, {
@@ -78,16 +91,37 @@ const EditAd = () => {
 
     const loadAd = async () => {
       try {
-        const response = await fetch(`${API_BASE}/api/announcements/${adId}`, {
-          credentials: 'include'
-        });
+        const [categoriesResponse, adResponse] = await Promise.all([
+          fetch(`${API_BASE}/api/announcements/categories`, { credentials: 'include' }),
+          fetch(`${API_BASE}/api/announcements/${adId}`, { credentials: 'include' })
+        ]);
 
-        if (!response.ok) {
+        const categoriesData = categoriesResponse.ok ? await categoriesResponse.json() : [];
+        const safeCategories = Array.isArray(categoriesData) ? categoriesData : [];
+        setCategories(safeCategories);
+        let ad = null;
+
+        if (adResponse.ok) {
+          ad = await adResponse.json();
+        } else {
+          try {
+            const myAdsResponse = await fetch(`${API_BASE}/api/announcements/my`, {
+              credentials: 'include'
+            });
+            const myAds = myAdsResponse.ok ? await myAdsResponse.json() : [];
+            ad = Array.isArray(myAds)
+              ? myAds.find((item) => String(item.id) === String(adId)) || null
+              : null;
+          } catch {
+            ad = null;
+          }
+        }
+
+        if (!ad) {
           setMessage({ type: 'error', text: t('editAd.errors.loadFailed', 'Failed to load listing') });
           return;
         }
 
-        const ad = await response.json();
         let priceType = 'fixed';
         let price = ad.price;
         if (ad.price === -1) {
@@ -98,9 +132,27 @@ const EditAd = () => {
           price = '';
         }
 
+        const selectedCategory = safeCategories.find((category) => category.name === ad.category);
+        const categoryId = selectedCategory ? String(selectedCategory.id) : '';
+
+        let nextSubcategories = [];
+        if (categoryId) {
+          try {
+            const subcategoriesResponse = await fetch(`${API_BASE}/api/announcements/categories/${categoryId}/subcategories`, {
+              credentials: 'include'
+            });
+            nextSubcategories = subcategoriesResponse.ok ? await subcategoriesResponse.json() : [];
+          } catch {
+            nextSubcategories = [];
+          }
+        }
+
+        setSubcategories(Array.isArray(nextSubcategories) ? nextSubcategories : []);
+
         setFormData({
           title: ad.title || '',
           description: ad.description || '',
+          categoryId,
           category: ad.category || 'OTHER',
           subcategory: ad.subcategory || '',
           location: ad.location || '',
@@ -119,8 +171,35 @@ const EditAd = () => {
     loadAd();
   }, [adId]);
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     const { name, value } = e.target;
+
+    if (name === 'categoryId') {
+      const selectedCategory = categories.find((category) => String(category.id) === String(value));
+      setFormData((prev) => ({
+        ...prev,
+        categoryId: value,
+        category: selectedCategory?.name || '',
+        subcategory: ''
+      }));
+      setSubcategories([]);
+
+      if (!value) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/api/announcements/categories/${value}/subcategories`, {
+          credentials: 'include'
+        });
+        const nextSubcategories = response.ok ? await response.json() : [];
+        setSubcategories(Array.isArray(nextSubcategories) ? nextSubcategories : []);
+      } catch {
+        setSubcategories([]);
+      }
+      return;
+    }
+
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -146,28 +225,29 @@ const EditAd = () => {
       return;
     }
 
-    let finalPrice = Number(formData.price || 0);
+    let finalPrice = formData.price;
     if (formData.priceType === 'free') {
       finalPrice = 0;
     } else if (formData.priceType === 'negotiable') {
       finalPrice = -1;
     }
 
+    const dto = {
+      title: formData.title,
+      description: formData.description,
+      category: formData.category,
+      subcategory: formData.subcategory,
+      location: formData.location,
+      condition: formData.condition,
+      price: parseInt(finalPrice, 10) || 0
+    };
+
     try {
       const response = await fetch(`${API_BASE}/api/announcements/${adId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({
-          title: formData.title,
-          description: formData.description,
-          category: formData.category,
-          subcategory: formData.subcategory,
-          location: formData.location,
-          condition: formData.condition,
-          price: finalPrice,
-          action: formData.action
-        })
+        body: JSON.stringify(dto)
       });
 
       if (!response.ok) {
@@ -190,6 +270,13 @@ const EditAd = () => {
           setMessage({ type: 'error', text: t('editAd.errors.photoUpdateFailed', 'Listing saved, but photo update failed') });
           return;
         }
+      }
+
+      if (formData.action === 'publish' && savedAd?.id) {
+        await fetch(`${API_BASE}/api/announcements/${savedAd.id}/send-to-moderation`, {
+          method: 'POST',
+          credentials: 'include'
+        });
       }
 
       navigate('/successful-edit-ad', {
@@ -229,14 +316,23 @@ const EditAd = () => {
           <textarea name="description" value={formData.description} onChange={handleChange} required />
 
           <label>{t('editAd.fields.category', 'Category')}</label>
-          <select name="category" value={formData.category} onChange={handleChange} required>
-            {categoryOptions.map((option) => (
-              <option key={option.value} value={option.value}>{option.label}</option>
-            ))}
-          </select>
+          <StyledSelect
+            name="categoryId"
+            value={formData.categoryId}
+            onChange={handleChange}
+            options={categorySelectOptions}
+            placeholder={t('createAd.chooseCategory', 'Choose a category')}
+          />
 
           <label>{t('editAd.fields.subcategory', 'Subcategory')}</label>
-          <input name="subcategory" value={formData.subcategory} onChange={handleChange} required />
+          <StyledSelect
+            name="subcategory"
+            value={formData.subcategory}
+            onChange={handleChange}
+            options={subcategoryOptions}
+            placeholder={t('createAd.chooseSubcategory', 'Choose a subcategory')}
+            disabled={!formData.categoryId}
+          />
 
           <label>{t('editAd.fields.location', 'Location')}</label>
           <div className="location-preview">
@@ -246,18 +342,22 @@ const EditAd = () => {
           <YandexLocationPicker onAddressChange={handleAddressSelect} />
 
           <label>{t('editAd.fields.condition', 'Condition')}</label>
-          <select name="condition" value={formData.condition} onChange={handleChange}>
-            <option value="USED">{t('enums.condition.USED')}</option>
-            <option value="NEW">{t('enums.condition.NEW')}</option>
-            <option value="BROKEN">{t('home.notWorking')}</option>
-          </select>
+          <StyledSelect
+            name="condition"
+            value={formData.condition}
+            onChange={handleChange}
+            options={conditionOptions}
+            placeholder={t('editAd.fields.condition', 'Condition')}
+          />
 
           <label>{t('editAd.fields.priceType', 'Price type')}</label>
-          <select name="priceType" value={formData.priceType} onChange={handleChange}>
-            <option value="fixed">{t('editAd.fixedPrice', 'Fixed price')}</option>
-            <option value="negotiable">{t('home.negotiable')}</option>
-            <option value="free">{t('home.free')}</option>
-          </select>
+          <StyledSelect
+            name="priceType"
+            value={formData.priceType}
+            onChange={handleChange}
+            options={priceTypeOptions}
+            placeholder={t('editAd.fields.priceType', 'Price type')}
+          />
 
           {formData.priceType === 'fixed' && (
             <>
@@ -293,10 +393,13 @@ const EditAd = () => {
           )}
 
           <label>{t('editAd.fields.afterSave', 'After save')}</label>
-          <select name="action" value={formData.action} onChange={handleChange}>
-            <option value="draft">{t('editAd.saveAsDraft', 'Save as draft')}</option>
-            <option value="publish">{t('editAd.sendToModeration', 'Send to moderation')}</option>
-          </select>
+          <StyledSelect
+            name="action"
+            value={formData.action}
+            onChange={handleChange}
+            options={actionOptions}
+            placeholder={t('editAd.fields.afterSave', 'After save')}
+          />
 
           <div className="editAdActions">
             <button type="button" className="secondary" onClick={() => navigate('/dashboard')}>{t('common.cancel')}</button>

@@ -368,6 +368,34 @@ label {
   background: var(--color-surface);
 }
 
+select.form-control,
+.tag-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 48px;
+  color: var(--color-text-primary);
+  border-color: var(--color-line);
+  background-color: rgba(255, 250, 246, 0.96);
+  background-image:
+    linear-gradient(135deg, transparent 50%, var(--color-mint-dark) 50%),
+    linear-gradient(45deg, var(--color-mint-dark) 50%, transparent 50%),
+    linear-gradient(180deg, rgba(156, 201, 178, 0.18), rgba(156, 201, 178, 0.18));
+  background-position:
+    calc(100% - 22px) calc(50% - 3px),
+    calc(100% - 16px) calc(50% - 3px),
+    calc(100% - 42px) 50%;
+  background-size: 6px 6px, 6px 6px, 1px 22px;
+  background-repeat: no-repeat;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+select.form-control:hover,
+.tag-select:hover {
+  border-color: var(--color-mint);
+  background-color: var(--color-surface);
+}
+
 .form-control[type="file"] {
   padding: 8px;
   cursor: pointer;
@@ -402,6 +430,29 @@ input[type="file"].form-control::-webkit-file-upload-button {
   outline: none;
   border-color: var(--color-purple);
   box-shadow: 0 0 0 4px rgba(110, 160, 134, 0.1);
+}
+
+select.form-control:focus,
+.tag-select:focus {
+  background-color: var(--color-surface);
+}
+
+select.form-control:disabled,
+.tag-select:disabled {
+  cursor: not-allowed;
+  color: var(--color-text-secondary);
+  border-color: rgba(234, 223, 213, 0.85);
+  background-color: rgba(240, 235, 227, 0.7);
+  background-image:
+    linear-gradient(135deg, transparent 50%, var(--color-text-secondary) 50%),
+    linear-gradient(45deg, var(--color-text-secondary) 50%, transparent 50%),
+    linear-gradient(180deg, rgba(123, 113, 107, 0.16), rgba(123, 113, 107, 0.16));
+}
+
+select.form-control option,
+.tag-select option {
+  color: var(--color-text-primary);
+  background: var(--color-surface);
 }
 
 textarea.form-control {
@@ -614,7 +665,6 @@ textarea.form-control {
   border: 2px solid var(--border);
   border-radius: var(--radius-md);
   font-size: 1rem;
-  background: var(--color-surface);
   transition: all var(--transition-base);
 }
 
