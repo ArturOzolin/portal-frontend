@@ -29,6 +29,7 @@ const ICON_MAP = {
 
 const ICON_SCALE = 2.7;
 const ICON_STROKE_FILTER = 'brightness(1.18) contrast(1.04) saturate(1.03)';
+const SUCCESS_ICON_FILTER = 'brightness(0) saturate(100%) invert(45%) sepia(17%) saturate(1067%) hue-rotate(108deg) brightness(92%) contrast(88%)';
 
 const Icon = ({ name, size = 24, className = '', alt = '' }) => {
   const src = ICON_MAP[name];
@@ -50,8 +51,8 @@ const Icon = ({ name, size = 24, className = '', alt = '' }) => {
         width: `${scaledSize}px`,
         height: `${scaledSize}px`,
         objectFit: 'contain',
-        filter: ICON_STROKE_FILTER,
-        backgroundColor: name === 'location' ? 'transparent' : '#fff',
+        filter: name === 'success' ? SUCCESS_ICON_FILTER : ICON_STROKE_FILTER,
+        backgroundColor: 'transparent',
         display: 'inline-block',
         verticalAlign: 'middle',
       }}
