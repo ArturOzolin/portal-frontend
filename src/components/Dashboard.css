@@ -529,6 +529,10 @@
   border-radius: var(--radius-full);
   font-size: 0.72rem;
   font-weight: 700;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(234, 223, 213, 0.95);
+  box-shadow: 0 6px 16px rgba(126, 101, 84, 0.12);
+  backdrop-filter: blur(6px);
 }
 
 .db-ad-body {
@@ -592,12 +596,12 @@
 }
 
 /* Status colors */
-.statusActive     { background: rgba(16,185,129,0.15); color: #059669; }
-.statusDraft      { background: rgba(245,158,11,0.15); color: #d97706; }
-.statusModeration { background: rgba(110,160,134,0.15); color: var(--color-mint-dark); }
-.statusBooked     { background: rgba(45, 212, 191, 0.18); color: #0f766e; }
-.statusArchived   { background: var(--color-pale-blue); color: var(--color-text-secondary); }
-.statusDeleted    { background: rgba(239,68,68,0.15); color: #dc2626; }
+.statusActive     { color: #059669; border-color: rgba(16, 185, 129, 0.28); }
+.statusDraft      { color: #d97706; border-color: rgba(245, 158, 11, 0.3); }
+.statusModeration { color: var(--color-mint-dark); border-color: rgba(110, 160, 134, 0.3); }
+.statusBooked     { color: #0f766e; border-color: rgba(20, 184, 166, 0.3); }
+.statusArchived   { color: var(--color-text-secondary); border-color: rgba(189, 217, 232, 0.9); }
+.statusDeleted    { color: #dc2626; border-color: rgba(239, 68, 68, 0.26); }
 
 /* Empty state */
 .db-empty {
