@@ -233,9 +233,9 @@ const AdDetails = () => {
 
               {/* ✨ НОВОЕ: статус + кнопки при BOOKED */}
               {isBooked && (
-                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                  <span style={{ background: '#ffc107', padding: '5px 10px', borderRadius: '5px' }}>
-                    ⚠️ {t('adDetails.isBooked', 'Забронировано')}
+                <div className="adBookedActions">
+                  <span className="adBookedBadge">
+                    {t('adDetails.isBooked', 'Забронировано')}
                   </span>
 
                   {/* Автор видит кнопку "Подтвердить продажу" */}
