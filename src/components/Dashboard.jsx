@@ -7,7 +7,7 @@ import { useI18n } from '../i18n/I18nProvider';
 import { Link, useNavigate } from 'react-router-dom';
 import bookmarkIcon from '../assets/bookmark.png';
 import eyeIcon from '../assets/eye.png';
-const API_BASE = 'http://localhost:8080';
+const API_BASE = '';
 const Dashboard = () => {
   const { t, language } = useI18n();
   const [user, setUser]               = useState(null);
@@ -35,17 +35,17 @@ const Dashboard = () => {
   const loadUserData = async () => {
     setLoading(true);
     try {
-      const userRes = await fetch('http://localhost:8080/api/users/me', { credentials: 'include' });
+      const userRes = await fetch('/api/users/me', { credentials: 'include' });
       if (!userRes.ok) { if (userRes.status === 401) window.location.href = '/login'; return; }
       setUser(await userRes.json());
 
-      const adsRes = await fetch('http://localhost:8080/api/announcements/my', { credentials: 'include' });
+      const adsRes = await fetch('/api/announcements/my', { credentials: 'include' });
       if (adsRes.ok) setAds((await adsRes.json()).filter(a => a.status !== 'DELETED'));
 
-      const favRes = await fetch('http://localhost:8080/api/favorites/ads', { credentials: 'include' });
+      const favRes = await fetch('/api/favorites/ads', { credentials: 'include' });
       if (favRes.ok) setFavoriteAds(await favRes.json());
 
-      const bookedRes = await fetch('http://localhost:8080/api/v1/bookings/my', { credentials: 'include' });
+      const bookedRes = await fetch('/api/v1/bookings/my', { credentials: 'include' });
       if (bookedRes.ok) setBookedAds(await bookedRes.json());
     } catch { setErrorMessage(t('dashboard.loadDataError', 'Failed to load data')); }
     finally { setLoading(false); }
@@ -96,7 +96,7 @@ const Dashboard = () => {
     if (newPassword !== confirmPassword) { setErrorMessage(t('dashboard.passwordsDontMatch', 'Passwords do not match!')); return false; }
     if (newPassword.length < 8) { setErrorMessage(t('dashboard.passwordTooShort', 'Password must be at least 8 characters!')); return false; }
     try {
-      const res = await fetch('http://localhost:8080/api/users/change-password', {
+      const res = await fetch('/api/users/change-password', {
         method: 'POST', credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ currentPassword, newPassword, confirmPassword }),
@@ -111,7 +111,7 @@ const Dashboard = () => {
     e.preventDefault();
     if (!window.confirm(t('dashboard.confirmDeleteAccount', 'Are you sure? This cannot be undone.'))) return;
     try {
-      const res = await fetch('http://localhost:8080/api/users/delete-account', {
+      const res = await fetch('/api/users/delete-account', {
         method: 'DELETE', credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password: deletePassword }),
@@ -122,7 +122,7 @@ const Dashboard = () => {
   };
 
   const handleLogout = async () => {
-    try { await fetch('http://localhost:8080/api/users/logout', { method: 'POST', credentials: 'include' }); }
+    try { await fetch('/api/users/logout', { method: 'POST', credentials: 'include' }); }
     catch {}
     window.location.href = '/login';
   };
@@ -130,7 +130,7 @@ const Dashboard = () => {
   const handleUnfavorite = async (e, adId) => {
     e.stopPropagation();
     try {
-      const res = await fetch(`http://localhost:8080/api/favorites/${adId}`, { method: 'POST', credentials: 'include' });
+      const res = await fetch(`/api/favorites/${adId}`, { method: 'POST', credentials: 'include' });
       if (res.ok) setFavoriteAds(prev => prev.filter(a => a.id !== adId));
     } catch { setErrorMessage('Error updating favorites'); }
   };
@@ -138,7 +138,7 @@ const Dashboard = () => {
   const handleDeleteAd = async (adId) => {
     if (!window.confirm(t('dashboard.confirmDeleteAd', 'Delete this ad?'))) return;
     try {
-      const res = await fetch(`http://localhost:8080/api/announcements/${adId}`, { method: 'DELETE', credentials: 'include' });
+      const res = await fetch(`/api/announcements/${adId}`, { method: 'DELETE', credentials: 'include' });
       if (res.ok) { setSuccessMessage(t('dashboard.adDeleted', 'Ad deleted')); loadUserData(); }
       else setErrorMessage(t('dashboard.deleteAdError', 'Error deleting ad'));
     } catch { setErrorMessage(t('dashboard.deleteAdError', 'Error deleting ad')); }
@@ -382,7 +382,7 @@ const Dashboard = () => {
                   <div key={ad.id} className="db-ad-card" onClick={() => window.open(`/ad/${ad.id}`, '_blank')}>
                     <div className="db-ad-image">
                       <img
-                        src={`http://localhost:8080/ad-photo?adId=${ad.id}&photoIndex=0`}
+                        src={`/ad-photo?adId=${ad.id}&photoIndex=0`}
                         alt={ad.title}
                         onError={e => { e.currentTarget.style.display = 'none'; e.currentTarget.nextSibling.style.display = 'flex'; }}
                       />

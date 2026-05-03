@@ -3,7 +3,7 @@ import './NotificationBell.css';
 import { useI18n } from '../i18n/I18nProvider';
 import notificationIcon from '../assets/notification.png';
 
-const API_BASE = 'http://localhost:8080';
+const API_BASE = '';
 
 const NotificationBell = ({ adIds = [] }) => {
   const { t } = useI18n();

@@ -1,28 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { apiGet } from '../../api';
 import AccessDenied from '../AccessDenied';
+import { useI18n } from '../../i18n/I18nProvider';
 import './ModerationHistory.css';
 
-function formatDateTime(value) {
-  if (!value) return '';
-  const date = new Date(value);
-  return date.toLocaleString('ru-RU', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
-  });
-}
-
 function ModerationHistory() {
+  const { t, language } = useI18n();
   const [history, setHistory] = useState([]);
   const [adminActions, setAdminActions] = useState([]);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(true);
   const [accessDenied, setAccessDenied] = useState(false);
   const [userMap, setUserMap] = useState({});
+
+  function formatDateTime(value) {
+    if (!value) return '';
+    return new Date(value).toLocaleString(language === 'ru' ? 'ru-RU' : 'en-GB', {
+      day: '2-digit', month: '2-digit', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
+    });
+  }
 
   useEffect(() => {
     setLoading(true);
@@ -41,18 +38,18 @@ function ModerationHistory() {
         if (err && (err.status === 401 || err.status === 403)) {
           setAccessDenied(true);
         } else {
-          setMessage('Не удалось загрузить историю');
+          setMessage(t('moderator.historyLoadError'));
         }
         setLoading(false);
       });
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (accessDenied) {
     return (
       <AccessDenied
-        title="Доступ к истории запрещен"
-        message="У вашей учетной записи нет прав модератора."
-        actionLabel="В личный кабинет"
+        title={t('moderator.historyAccessTitle')}
+        message={t('moderator.historyAccessMsg')}
+        actionLabel={t('moderator.goToDashboard')}
         actionHref="/dashboard"
       />
     );
@@ -61,35 +58,35 @@ function ModerationHistory() {
   if (loading) {
     return (
       <div className="history-page">
-        <h1>История модерации</h1>
-        <div className="history-message">Загрузка...</div>
+        <h1>{t('moderator.historyTitle')}</h1>
+        <div className="history-message">{t('moderator.historyLoading')}</div>
       </div>
     );
   }
 
   return (
     <div className="history-page">
-      <h1>История модерации</h1>
+      <h1>{t('moderator.historyTitle')}</h1>
 
       <div className="history-nav">
-        <a href="/moderator/dashboard">Назад</a>
-        <a href="/admin/dashboard">Админка</a>
-        <a href="/logout">Выйти</a>
+        <a href="/moderator/dashboard">{t('moderator.historyBack')}</a>
+        <a href="/admin/dashboard">{t('moderator.historyAdminLink')}</a>
+        <a href="/logout">{t('moderator.historySignOut')}</a>
       </div>
 
       {message && <div className="history-message">{message}</div>}
 
-      <h3>История объявлений</h3>
+      <h3>{t('moderator.listingHistoryTitle')}</h3>
       <table className="history-table" border="1" cellPadding="6">
         <thead>
           <tr>
             <th>#</th>
-            <th>Объявление</th>
-            <th>Из</th>
-            <th>В</th>
-            <th>Модератор</th>
-            <th>Время</th>
-            <th>Причина</th>
+            <th>{t('moderator.colListing')}</th>
+            <th>{t('moderator.colFrom')}</th>
+            <th>{t('moderator.colTo')}</th>
+            <th>{t('moderator.colModerator')}</th>
+            <th>{t('moderator.colTime')}</th>
+            <th>{t('moderator.colReason')}</th>
           </tr>
         </thead>
         <tbody>
@@ -106,22 +103,22 @@ function ModerationHistory() {
           ))}
           {history.length === 0 && (
             <tr>
-              <td colSpan="7">Пока нет записей</td>
+              <td colSpan="7">{t('moderator.noListingRecords')}</td>
             </tr>
           )}
         </tbody>
       </table>
 
-      <h3>Админские действия</h3>
+      <h3>{t('moderator.adminActionsTitle')}</h3>
       <table className="history-table" border="1" cellPadding="6">
         <thead>
           <tr>
             <th>#</th>
-            <th>Действие</th>
-            <th>Цель</th>
-            <th>Подробнее</th>
-            <th>Кто</th>
-            <th>Время</th>
+            <th>{t('moderator.colAction')}</th>
+            <th>{t('moderator.colTarget')}</th>
+            <th>{t('moderator.colDetails')}</th>
+            <th>{t('moderator.colWho')}</th>
+            <th>{t('moderator.colTime')}</th>
           </tr>
         </thead>
         <tbody>
@@ -137,7 +134,7 @@ function ModerationHistory() {
           ))}
           {adminActions.length === 0 && (
             <tr>
-              <td colSpan="6">Пока нет записей</td>
+              <td colSpan="6">{t('moderator.noAdminRecords')}</td>
             </tr>
           )}
         </tbody>
@@ -147,4 +144,3 @@ function ModerationHistory() {
 }
 
 export default ModerationHistory;
-

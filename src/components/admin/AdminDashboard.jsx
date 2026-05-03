@@ -1,28 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { apiGet, apiPost } from '../../api';
 import AccessDenied from '../AccessDenied';
+import { useI18n } from '../../i18n/I18nProvider';
 import './AdminDashboard.css';
 
-const ROLE_LABELS = {
-  ADMIN: 'Администратор',
-  MODERATOR: 'Модератор',
-  USER: 'Пользователь'
-};
-
-function getRoleLabel(role) {
-  if (!role) return '';
-  if (typeof role === 'string') return ROLE_LABELS[role] || role;
-  if (role.displayName) return role.displayName;
-  return String(role.name || role);
-}
-
 function AdminDashboard() {
+  const { t } = useI18n();
   const [users, setUsers] = useState([]);
   const [stats, setStats] = useState(null);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
   const [loading, setLoading] = useState(true);
   const [accessDenied, setAccessDenied] = useState(false);
+
+  const ROLE_LABELS = {
+    ADMIN: t('admin.roleAdmin'),
+    MODERATOR: t('admin.roleModerator'),
+    USER: t('admin.roleUser'),
+  };
+
+  function getRoleLabel(role) {
+    if (!role) return '';
+    if (typeof role === 'string') return ROLE_LABELS[role] || role;
+    if (role.displayName) return role.displayName;
+    return String(role.name || role);
+  }
 
   const refreshDashboard = async () => {
     const data = await apiGet('/api/admin/dashboard');
@@ -49,13 +51,13 @@ function AdminDashboard() {
         } else if (!err?.status) {
           setAccessDenied(true);
         } else {
-          setMessage('Не удалось загрузить панель администратора');
+          setMessage(t('admin.loadError'));
           setMessageType('error');
         }
         setLoading(false);
       });
     return () => { active = false; };
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const showNotification = (text, type) => {
     setMessage(text);
@@ -66,10 +68,10 @@ function AdminDashboard() {
   const submitRole = async (userId, role, action) => {
     try {
       const res = await apiPost('/api/admin/role', { targetUserId: userId, role, action });
-      showNotification(res.message || 'Готово', res.success ? 'success' : 'error');
+      showNotification(res.message || t('admin.done'), res.success ? 'success' : 'error');
       await refreshDashboard();
-    } catch (err) {
-      showNotification('Не удалось обновить роль', 'error');
+    } catch {
+      showNotification(t('admin.roleUpdateError'), 'error');
     }
   };
 
@@ -80,16 +82,17 @@ function AdminDashboard() {
         action,
         amount: Number(amount || 0)
       });
-      showNotification(res.message || 'Готово', res.success ? 'success' : 'error');
+      showNotification(res.message || t('admin.done'), res.success ? 'success' : 'error');
       await refreshDashboard();
     } catch (err) {
-      showNotification('Не удалось обновить монеты', 'error');
+      const msg = err?.body?.message || t('admin.coinsUpdateError');
+      showNotification(msg, 'error');
     }
   };
 
   const handleLogout = async () => {
     try {
-      await fetch('http://localhost:8080/api/users/logout', { method: 'POST', credentials: 'include' });
+      await fetch('/api/users/logout', { method: 'POST', credentials: 'include' });
     } catch {}
     window.location.href = '/login';
   };
@@ -97,9 +100,9 @@ function AdminDashboard() {
   if (accessDenied) {
     return (
       <AccessDenied
-        title="Доступ к админке запрещен"
-        message="У вашей учетной записи нет прав администратора."
-        actionLabel="В личный кабинет"
+        title={t('admin.accessTitle')}
+        message={t('admin.accessMsg')}
+        actionLabel={t('admin.goToDashboard')}
         actionHref="/dashboard"
       />
     );
@@ -109,7 +112,9 @@ function AdminDashboard() {
     return (
       <div className="adm-wrap">
         <div className="adm-shell">
-          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--color-text-secondary)' }}>Загрузка…</div>
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--color-text-secondary)' }}>
+            {t('admin.loading')}
+          </div>
         </div>
       </div>
     );
@@ -125,11 +130,11 @@ function AdminDashboard() {
             <div className="adm-brand-mark"></div>
             <span>PORTAL</span>
           </a>
-          <span className="adm-topbar-title">Панель администратора</span>
+          <span className="adm-topbar-title">{t('admin.title')}</span>
           <div className="adm-topbar-nav">
-            <a href="/dashboard" className="adm-btn">Личный кабинет</a>
-            <a href="/moderator/dashboard" className="adm-btn">История модерации</a>
-            <button className="adm-btn" type="button" onClick={handleLogout}>Выйти</button>
+            <a href="/dashboard" className="adm-btn">{t('admin.dashboard')}</a>
+            <a href="/moderator/dashboard" className="adm-btn">{t('admin.moderationHistory')}</a>
+            <button className="adm-btn" type="button" onClick={handleLogout}>{t('admin.signOut')}</button>
           </div>
         </header>
 
@@ -142,43 +147,43 @@ function AdminDashboard() {
         <div className="adm-stats">
           <div className="adm-stat">
             <div className="adm-stat-num">{stats?.totalUsers ?? 0}</div>
-            <div className="adm-stat-label">Всего пользователей</div>
+            <div className="adm-stat-label">{t('admin.totalUsers')}</div>
           </div>
           <div className="adm-stat">
             <div className="adm-stat-num">{stats?.adminCount ?? 0}</div>
-            <div className="adm-stat-label">Администраторов</div>
+            <div className="adm-stat-label">{t('admin.adminCount')}</div>
           </div>
           <div className="adm-stat">
             <div className="adm-stat-num">{stats?.moderatorCount ?? 0}</div>
-            <div className="adm-stat-label">Модераторов</div>
+            <div className="adm-stat-label">{t('admin.moderatorCount')}</div>
           </div>
         </div>
 
         {/* Users table */}
         <div className="adm-card">
-          <h2 className="adm-card-title">Пользователи</h2>
+          <h2 className="adm-card-title">{t('admin.usersTitle')}</h2>
           <table className="adm-table">
             <thead>
               <tr>
                 <th style={{ width: 50 }}>ID</th>
                 <th>Email</th>
-                <th>Имя</th>
-                <th style={{ width: 140 }}>Роли</th>
-                <th style={{ width: 80 }}>Монеты</th>
-                <th style={{ width: 320 }}>Действия</th>
+                <th>{t('admin.colName')}</th>
+                <th style={{ width: 140 }}>{t('admin.colRoles')}</th>
+                <th style={{ width: 80 }}>{t('admin.colCoins')}</th>
+                <th style={{ width: 320 }}>{t('admin.colActions')}</th>
               </tr>
             </thead>
             <tbody>
               {users.length === 0 && (
                 <tr>
                   <td colSpan="6" style={{ textAlign: 'center', color: 'var(--color-text-secondary)' }}>
-                    Пользователи не найдены
+                    {t('admin.noUsers')}
                   </td>
                 </tr>
               )}
               {users.map((user) => {
                 const userRoles = new Set((user.roles || []).map(String));
-                const isModerator = userRoles.has('MODERATOR') || userRoles.has('ADMIN');
+                const isModerator = userRoles.has('MODERATOR');
                 const isAdmin = userRoles.has('ADMIN');
 
                 return (
@@ -200,14 +205,14 @@ function AdminDashboard() {
                             type="button"
                             onClick={() => submitRole(user.id, 'MODERATOR', isModerator ? 'revoke' : 'assign')}
                           >
-                            {isModerator ? 'Снять модератора' : 'Модератор'}
+                            {isModerator ? t('admin.revokeModerator') : t('admin.makeModerator')}
                           </button>
                           <button
                             className={`adm-btn ${isAdmin ? 'adm-btn-danger' : 'adm-btn-primary'}`}
                             type="button"
                             onClick={() => submitRole(user.id, 'ADMIN', isAdmin ? 'revoke' : 'assign')}
                           >
-                            {isAdmin ? 'Снять админа' : 'Сделать админом'}
+                            {isAdmin ? t('admin.revokeAdmin') : t('admin.makeAdmin')}
                           </button>
                         </div>
                         <div className="adm-inline-form">
@@ -222,7 +227,7 @@ function AdminDashboard() {
                             type="button"
                             onClick={() => submitCoins(user.id, 'add', document.getElementById(`coins-add-${user.id}`).value)}
                           >
-                            + Монеты
+                            {t('admin.addCoins')}
                           </button>
                         </div>
                         <div className="adm-inline-form">
@@ -237,7 +242,7 @@ function AdminDashboard() {
                             type="button"
                             onClick={() => submitCoins(user.id, 'deduct', document.getElementById(`coins-deduct-${user.id}`).value)}
                           >
-                            − Монеты
+                            {t('admin.deductCoins')}
                           </button>
                         </div>
                       </div>

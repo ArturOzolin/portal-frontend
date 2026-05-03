@@ -5,7 +5,7 @@ import ProfanityWarningModal from './ProfanityWarningModal';
 import YandexLocationPicker from './YandexLocationPicker.jsx';
 import { useI18n } from '../i18n/I18nProvider';
 
-const API_BASE = 'http://localhost:8080';
+const API_BASE = '';
 
 const categoryOptions = [
   { value: 'ELECTRONICS', label: 'Электроника' },

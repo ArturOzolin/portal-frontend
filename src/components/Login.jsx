@@ -19,7 +19,7 @@ const Login = () => {
 
   const checkAuthStatus = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/users/me', {
+      const response = await fetch('/api/users/me', {
         method: 'GET',
         credentials: 'include'
       });
@@ -38,7 +38,7 @@ const Login = () => {
     setMessage('');
 
     try {
-      const response = await fetch('http://localhost:8080/api/users/login', {
+      const response = await fetch('/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ const Login = () => {
 
   const handleLogout = async () => {
     try {
-      await fetch('http://localhost:8080/api/users/logout', {
+      await fetch('/api/users/logout', {
         method: 'POST',
         credentials: 'include'
       });

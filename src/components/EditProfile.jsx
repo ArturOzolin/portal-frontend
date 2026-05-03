@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 import './EditProfile.css';
 import YandexLocationPicker from './YandexLocationPicker.jsx';
 
-const API_BASE_URL = 'http://localhost:8080';
+const API_BASE_URL = '';
 
 const EditProfile = () => {
   const [user, setUser] = useState(null);

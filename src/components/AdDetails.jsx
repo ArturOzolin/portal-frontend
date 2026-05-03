@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import './AdDetails.css';
 import { useI18n } from '../i18n/I18nProvider';
 
-const API_BASE = 'http://localhost:8080';
+const API_BASE = '';
 
 const AdDetails = () => {
   const { t, language } = useI18n();
