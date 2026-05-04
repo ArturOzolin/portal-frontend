@@ -75,21 +75,6 @@ function AdminDashboard() {
     }
   };
 
-  const submitCoins = async (userId, action, amount) => {
-    try {
-      const res = await apiPost('/api/admin/coins', {
-        targetUserId: userId,
-        action,
-        amount: Number(amount || 0)
-      });
-      showNotification(res.message || t('admin.done'), res.success ? 'success' : 'error');
-      await refreshDashboard();
-    } catch (err) {
-      const msg = err?.body?.message || t('admin.coinsUpdateError');
-      showNotification(msg, 'error');
-    }
-  };
-
   const handleLogout = async () => {
     try {
       await fetch('/api/users/logout', { method: 'POST', credentials: 'include' });
@@ -169,14 +154,13 @@ function AdminDashboard() {
                 <th>Email</th>
                 <th>{t('admin.colName')}</th>
                 <th style={{ width: 140 }}>{t('admin.colRoles')}</th>
-                <th style={{ width: 80 }}>{t('admin.colCoins')}</th>
                 <th style={{ width: 320 }}>{t('admin.colActions')}</th>
               </tr>
             </thead>
             <tbody>
               {users.length === 0 && (
                 <tr>
-                  <td colSpan="6" style={{ textAlign: 'center', color: 'var(--color-text-secondary)' }}>
+                  <td colSpan="5" style={{ textAlign: 'center', color: 'var(--color-text-secondary)' }}>
                     {t('admin.noUsers')}
                   </td>
                 </tr>
@@ -196,7 +180,6 @@ function AdminDashboard() {
                         <span key={i} className="adm-role-badge">{getRoleLabel(role)}</span>
                       ))}
                     </td>
-                    <td>🪙 {user.coins}</td>
                     <td>
                       <div className="adm-actions">
                         <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
@@ -213,36 +196,6 @@ function AdminDashboard() {
                             onClick={() => submitRole(user.id, 'ADMIN', isAdmin ? 'revoke' : 'assign')}
                           >
                             {isAdmin ? t('admin.revokeAdmin') : t('admin.makeAdmin')}
-                          </button>
-                        </div>
-                        <div className="adm-inline-form">
-                          <input
-                            type="number"
-                            min="1"
-                            defaultValue="50"
-                            id={`coins-add-${user.id}`}
-                          />
-                          <button
-                            className="adm-btn adm-btn-primary"
-                            type="button"
-                            onClick={() => submitCoins(user.id, 'add', document.getElementById(`coins-add-${user.id}`).value)}
-                          >
-                            {t('admin.addCoins')}
-                          </button>
-                        </div>
-                        <div className="adm-inline-form">
-                          <input
-                            type="number"
-                            min="1"
-                            defaultValue="20"
-                            id={`coins-deduct-${user.id}`}
-                          />
-                          <button
-                            className="adm-btn adm-btn-danger"
-                            type="button"
-                            onClick={() => submitCoins(user.id, 'deduct', document.getElementById(`coins-deduct-${user.id}`).value)}
-                          >
-                            {t('admin.deductCoins')}
                           </button>
                         </div>
                       </div>

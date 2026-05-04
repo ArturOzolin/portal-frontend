@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './Home.css';
 import { useI18n } from '../i18n/I18nProvider';
 import LanguageToggle from './LanguageToggle';
-import { Link, useNavigate } from 'react-router-dom';
-const API_BASE = '';
+import { Link } from 'react-router-dom';
+const API_BASE = 'http://localhost:8080';
 
 const CATEGORY_COLORS = {
   ELECTRONICS: '#d7eaf3',
@@ -23,7 +23,6 @@ const CONDITION_COLORS = {
 const Home = () => {
     const { t, language } = useI18n();
     const [ads, setAds] = useState([]);
-    const navigate = useNavigate();
     const [filters, setFilters] = useState({
         searchQuery: '',
         minPrice: '',
@@ -34,11 +33,6 @@ const Home = () => {
     const [loading, setLoading] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [favorites, setFavorites] = useState(new Set());
-
-    useEffect(() => {
-        const timer = setTimeout(() => fetchAds(filters), 400);
-        return () => clearTimeout(timer);
-    }, [filters.searchQuery]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         fetchAds();
@@ -72,17 +66,26 @@ const Home = () => {
         } catch {}
     };
 
-    const fetchAds = async (currentFilters = filters) => {
+    const fetchAds = async () => {
             setLoading(true);
             try {
-                const queryParams = new URLSearchParams({
-                    text: currentFilters.searchQuery,
-                    minPrice: currentFilters.minPrice,
-                    maxPrice: currentFilters.maxPrice,
-                    category: currentFilters.category,
-                    condition: currentFilters.condition
-                });
-                const url = `${API_BASE}/api/announcements/search?${queryParams}`;
+                // Если в поиске что-то введено, используем наш новый ElasticSearch эндпоинт
+                // Если поиск пустой - используем обычный фильтр
+                let url;
+                if (filters.searchQuery && filters.searchQuery.length > 2) {
+                    // Это тот самый эндпоинт, который мы напишем для ElasticSearchService
+                    url = `${API_BASE}/api/announcements/elastic-search?query=${encodeURIComponent(filters.searchQuery)}`;
+                } else {
+                    const queryParams = new URLSearchParams({
+                        text: filters.searchQuery,
+                        minPrice: filters.minPrice,
+                        maxPrice: filters.maxPrice,
+                        category: filters.category,
+                        condition: filters.condition
+                    });
+                    url = `${API_BASE}/api/announcements/search?${queryParams}`;
+                }
+
                 const response = await fetch(url);
                 if (response.ok) {
                     const data = await response.json();
@@ -107,7 +110,7 @@ const Home = () => {
     const handleReset = () => {
         const empty = { searchQuery: '', minPrice: '', maxPrice: '', category: '', condition: '' };
         setFilters(empty);
-        fetchAds(empty);
+        setTimeout(() => fetchAds(), 0);
     };
 
     const formatPrice = (price) => {
@@ -147,13 +150,6 @@ const Home = () => {
                             value={filters.searchQuery}
                             onChange={handleChange}
                         />
-                        <button type="submit" className="search-btn" aria-label={t('home.search')}>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                 stroke="currentColor" strokeWidth="2.5">
-                                <circle cx="11" cy="11" r="7"/>
-                                <path d="M20 20L17 17"/>
-                            </svg>
-                        </button>
                     </form>
 
                     {isLoggedIn
