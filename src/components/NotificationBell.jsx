@@ -100,6 +100,8 @@ const NotificationBell = ({ adIds = [] }) => {
     if (action === 'approve') return t('notifications.approve', 'Listing approved');
     if (action === 'reject') return t('notifications.reject', 'Needs revision');
     if (action === 'delete') return t('notifications.delete', 'Listing rejected');
+    if (action === 'archive') return t('notifications.archive', 'Listing hidden');
+    if (action === 'comment_delete') return t('notifications.commentDelete', 'Comment deleted');
     return t('notifications.title', 'Notification');
   };
 

@@ -113,6 +113,8 @@ export const translations = {
       approve: 'Объявление одобрено',
       reject: 'Требуется доработка',
       delete: 'Объявление отклонено',
+      archive: 'Объявление скрыто',
+      commentDelete: 'Комментарий удален',
       defaultText: 'Статус объявления изменен модератором'
     },
     dashboard: {
@@ -287,6 +289,12 @@ export const translations = {
       unknownUser: 'Неизвестный пользователь',
       commentAddError: 'Не удалось добавить комментарий',
       commentAdded: 'Комментарий добавлен',
+      deleteComment: 'Удалить комментарий',
+      hideListing: 'Скрыть объявление',
+      archiveReasonPrompt: 'Укажите причину скрытия объявления',
+      archiveError: 'Не удалось скрыть объявление',
+      commentDeleteError: 'Не удалось удалить комментарий',
+      commentDeleted: 'Комментарий удален',
       category: 'Категория',
       condition: 'Состояние',
       author: 'Автор',
@@ -583,6 +591,8 @@ export const translations = {
       approve: 'Listing approved',
       reject: 'Needs revision',
       delete: 'Listing rejected',
+      archive: 'Listing hidden',
+      commentDelete: 'Comment deleted',
       defaultText: 'Listing status was changed by moderator'
     },
     dashboard: {
@@ -757,6 +767,12 @@ export const translations = {
       unknownUser: 'Unknown user',
       commentAddError: 'Failed to add comment',
       commentAdded: 'Comment added',
+      deleteComment: 'Delete comment',
+      hideListing: 'Hide listing',
+      archiveReasonPrompt: 'Please provide a reason for hiding the listing',
+      archiveError: 'Failed to hide listing',
+      commentDeleteError: 'Failed to delete comment',
+      commentDeleted: 'Comment deleted',
       category: 'Category',
       condition: 'Condition',
       author: 'Author',

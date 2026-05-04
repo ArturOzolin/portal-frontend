@@ -20,6 +20,7 @@ const AdDetails = () => {
   const [hasPhoto, setHasPhoto] = useState(false);
   const [liked, setLiked] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(null);
+  const [currentUserRoles, setCurrentUserRoles] = useState([]);
   const [bookingStatus, setBookingStatus] = useState('idle');
 
   const formatPrice = (price) => {
@@ -66,6 +67,7 @@ const AdDetails = () => {
       if (meResp.ok) {
         const meData = await meResp.json();
         setCurrentUserId(meData.id);
+        setCurrentUserRoles(Array.isArray(meData.roles) ? meData.roles : []);
       }
 
       const favRes = await fetch(`${API_BASE}/api/favorites`, { credentials: 'include' });
@@ -155,6 +157,28 @@ const AdDetails = () => {
     }
   };
 
+  const handleArchive = async () => {
+    const reasonInput = window.prompt(t('adDetails.archiveReasonPrompt', 'Укажите причину скрытия'));
+    if (reasonInput === null) return;
+    const reason = reasonInput.trim();
+    try {
+      const res = await fetch(`${API_BASE}/api/moderator/archive`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ adId: announcement.id, reason })
+      });
+      if (!res.ok) {
+        const msg = await res.text();
+        setError(msg || t('adDetails.archiveError', 'Не удалось скрыть объявление'));
+        return;
+      }
+      loadData();
+    } catch (e) {
+      setError(e.message || t('adDetails.archiveError', 'Не удалось скрыть объявление'));
+    }
+  };
+
   const toggleFavorite = async () => {
     const res = await fetch(`${API_BASE}/api/favorites/${id}`, {
       method: 'POST', credentials: 'include'
@@ -195,6 +219,26 @@ const AdDetails = () => {
     }
   };
 
+  const handleDeleteComment = async (commentId) => {
+    setCommentFeedback({ type: '', text: '' });
+    try {
+      const res = await fetch(`${API_BASE}/api/moderator/comments/${commentId}`, {
+        method: 'DELETE',
+        credentials: 'include'
+      });
+      if (res.status === 401) { navigate('/login'); return; }
+      if (!res.ok) {
+        const msg = await res.text();
+        setCommentFeedback({ type: 'error', text: msg || t('adDetails.commentDeleteError', 'Failed to delete comment') });
+        return;
+      }
+      setComments((prev) => prev.filter((item) => item.id !== commentId));
+      setCommentFeedback({ type: 'success', text: t('adDetails.commentDeleted', 'Comment deleted') });
+    } catch (e) {
+      setCommentFeedback({ type: 'error', text: e.message || t('adDetails.commentDeleteError', 'Failed to delete comment') });
+    }
+  };
+
   if (loading) {
     return <div className="adDetailsPage"><div className="adDetailsCard">{t('common.loading')}</div></div>;
   }
@@ -208,6 +252,8 @@ const AdDetails = () => {
   const isLoggedIn = !!currentUserId;
   const isActive = announcement.status === 'ACTIVE';
   const isBooked = announcement.status === 'BOOKED';
+  const roleSet = new Set((currentUserRoles || []).map((role) => (typeof role === 'string' ? role : role?.name || role?.code || role?.role || String(role))));
+  const canModerate = roleSet.has('ADMIN') || roleSet.has('MODERATOR');
 
   return (
     <div className="adDetailsPage">
@@ -271,6 +317,16 @@ const AdDetails = () => {
                   <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                 </svg>
               </button>
+
+              {canModerate && isActive && (
+                <button
+                  className="adBookBtn"
+                  onClick={handleArchive}
+                  style={{ borderColor: '#dc3545', color: '#dc3545' }}
+                >
+                  {t('adDetails.hideListing', 'Скрыть объявление')}
+                </button>
+              )}
             </div>
           </div>
 
@@ -338,9 +394,20 @@ const AdDetails = () => {
                 <div key={comment.id} className="commentItem">
                   <div className="commentHeader">
                     <strong>{comment.userName}</strong>
-                    <span>{formatDate(comment.createdAt)}</span>
+                    <div className="commentMeta">
+                      <span>{formatDate(comment.createdAt)}</span>
+                      {canModerate && (
+                        <button
+                          type="button"
+                          className="commentDeleteBtn"
+                          onClick={() => handleDeleteComment(comment.id)}
+                        >
+                          {t('adDetails.deleteComment', 'Delete comment')}
+                        </button>
+                      )}
+                    </div>
                   </div>
-                  <p>{comment.content}</p>
+                  <p className="commentContent">{comment.content}</p>
                 </div>
               ))
             )}

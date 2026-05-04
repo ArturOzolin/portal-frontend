@@ -133,7 +133,7 @@ function AdminDashboard() {
           <span className="adm-topbar-title">{t('admin.title')}</span>
           <div className="adm-topbar-nav">
             <a href="/dashboard" className="adm-btn">{t('admin.dashboard')}</a>
-            <a href="/moderator/dashboard" className="adm-btn">{t('admin.moderationHistory')}</a>
+            <a href="/moderator/history" className="adm-btn">{t('admin.moderationHistory')}</a>
             <button className="adm-btn" type="button" onClick={handleLogout}>{t('admin.signOut')}</button>
           </div>
         </header>
