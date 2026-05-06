@@ -22,6 +22,7 @@ const AdDetails = () => {
   const [currentUserId, setCurrentUserId] = useState(null);
   const [currentUserRoles, setCurrentUserRoles] = useState([]);
   const [bookingStatus, setBookingStatus] = useState('idle');
+  const [isMyBooking, setIsMyBooking] = useState(false);
 
   const formatPrice = (price) => {
     if (price === -1) return t('home.negotiable');
@@ -68,6 +69,12 @@ const AdDetails = () => {
         const meData = await meResp.json();
         setCurrentUserId(meData.id);
         setCurrentUserRoles(Array.isArray(meData.roles) ? meData.roles : []);
+
+        const myBookingsRes = await fetch(`${API_BASE}/api/v1/bookings/my`, { credentials: 'include' });
+        if (myBookingsRes.ok) {
+          const myBookings = await myBookingsRes.json();
+          setIsMyBooking(myBookings.some(ad => ad.id === Number(id)));
+        }
       }
 
       const favRes = await fetch(`${API_BASE}/api/favorites`, { credentials: 'include' });
@@ -263,8 +270,8 @@ const AdDetails = () => {
             <h1>{announcement.title}</h1>
             <div className="adTitleActions">
 
-              {/* ✨ ИЗМЕНЕНО: кнопка Забронировать — только для не-автора, активного объявления */}
-              {isActive && isLoggedIn && !isAuthor && (
+              {/* Забронировать — только для не-автора, активного объявления, без своей брони */}
+              {isActive && isLoggedIn && !isAuthor && !isMyBooking && (
                 <button
                   className="adBookBtn"
                   onClick={handleBook}
@@ -277,7 +284,23 @@ const AdDetails = () => {
                 </button>
               )}
 
-              {/* ✨ НОВОЕ: статус + кнопки при BOOKED */}
+              {/* Пользователь уже забронировал этот товар (но статус ещё ACTIVE) */}
+              {isActive && isMyBooking && (
+                <div className="adBookedActions">
+                  <span className="adBookedBadge">
+                    {t('adDetails.myBooking', 'Вы забронировали')}
+                  </span>
+                  <button
+                    className="adBookBtn"
+                    onClick={handleCancelBooking}
+                    style={{ background: '#dc3545', color: 'white' }}
+                  >
+                    ❌ {t('adDetails.cancelBooking', 'Отменить бронь')}
+                  </button>
+                </div>
+              )}
+
+              {/* Статус BOOKED */}
               {isBooked && (
                 <div className="adBookedActions">
                   <span className="adBookedBadge">
@@ -295,8 +318,8 @@ const AdDetails = () => {
                     </button>
                   )}
 
-                  {/* Любой авторизованный пользователь (автор или покупатель) может отменить */}
-                  {isLoggedIn && (
+                  {/* Отменить бронь — только автор или тот, кто забронировал */}
+                  {(isAuthor || isMyBooking) && (
                     <button
                       className="adBookBtn"
                       onClick={handleCancelBooking}
