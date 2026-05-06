@@ -35,7 +35,7 @@ const Home = () => {
     const [favorites, setFavorites] = useState(new Set());
 
     useEffect(() => {
-        fetchAds();
+        fetchAds(filters);
         fetch(`${API_BASE}/api/users/me`, { credentials: 'include' })
             .then(r => {
                 setIsLoggedIn(r.ok);
@@ -66,41 +66,47 @@ const Home = () => {
         } catch {}
     };
 
-    const fetchAds = async () => {
-            setLoading(true);
-            try {
-                // Если в поиске что-то введено, используем наш новый ElasticSearch эндпоинт
-                // Если поиск пустой - используем обычный фильтр
-                let url;
-                if (filters.searchQuery && filters.searchQuery.length > 2) {
-                    // Это тот самый эндпоинт, который мы напишем для ElasticSearchService
-                    url = `${API_BASE}/api/announcements/elastic-search?query=${encodeURIComponent(filters.searchQuery)}`;
-                } else {
-                    const queryParams = new URLSearchParams({
-                        text: filters.searchQuery,
-                        minPrice: filters.minPrice,
-                        maxPrice: filters.maxPrice,
-                        category: filters.category,
-                        condition: filters.condition
-                    });
-                    url = `${API_BASE}/api/announcements/search?${queryParams}`;
-                }
+    const fetchAds = async (currentFilters = filters) => {
+        setLoading(true);
+        try {
+            let data = null;
 
-                const response = await fetch(url);
-                if (response.ok) {
-                    const data = await response.json();
-                    setAds(data);
+            if (currentFilters.searchQuery && currentFilters.searchQuery.length > 2) {
+                const esRes = await fetch(
+                    `${API_BASE}/api/announcements/elastic-search?query=${encodeURIComponent(currentFilters.searchQuery)}`
+                );
+                if (esRes.ok) {
+                    data = await esRes.json();
                 }
-            } catch (error) {
-                console.error('Network error:', error);
-            } finally {
-                setLoading(false);
             }
-        };
+
+            if (data === null) {
+                const queryParams = new URLSearchParams({
+                    text: currentFilters.searchQuery,
+                    minPrice: currentFilters.minPrice,
+                    maxPrice: currentFilters.maxPrice,
+                    category: currentFilters.category,
+                    condition: currentFilters.condition
+                });
+                const res = await fetch(`${API_BASE}/api/announcements/search?${queryParams}`);
+                if (res.ok) {
+                    data = await res.json();
+                }
+            }
+
+            if (data !== null) {
+                setAds(data);
+            }
+        } catch (error) {
+            console.error('Network error:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleFilterSubmit = (e) => {
         e.preventDefault();
-        fetchAds();
+        fetchAds(filters);
     };
 
     const handleChange = (e) => {
@@ -110,7 +116,7 @@ const Home = () => {
     const handleReset = () => {
         const empty = { searchQuery: '', minPrice: '', maxPrice: '', category: '', condition: '' };
         setFilters(empty);
-        setTimeout(() => fetchAds(), 0);
+        fetchAds(empty);
     };
 
     const formatPrice = (price) => {
@@ -150,6 +156,13 @@ const Home = () => {
                             value={filters.searchQuery}
                             onChange={handleChange}
                         />
+                        <button type="submit" className="search-btn" aria-label={t('home.search')}>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" strokeWidth="2.5">
+                                <circle cx="11" cy="11" r="7"/>
+                                <path d="M20 20L17 17"/>
+                            </svg>
+                        </button>
                     </form>
 
                     {isLoggedIn
